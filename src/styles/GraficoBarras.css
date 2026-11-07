@@ -1,0 +1,36 @@
+.grafico {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.grafico__linha {
+  display: grid;
+  grid-template-columns: minmax(5rem, 9rem) 1fr 2.5rem;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.grafico__rotulo {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.grafico__trilho {
+  height: 0.9rem;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.grafico__barra {
+  height: 100%;
+  background: var(--verde);
+}
+
+.grafico__valor {
+  text-align: right;
+  font-weight: 600;
+}

@@ -1,0 +1,36 @@
+:root {
+  --fundo: #ffffff;
+  --superficie: #f7f7f7;
+  --borda: #dddddd;
+  --texto: #111111;
+  --texto-suave: #666666;
+  --verde: #2e7d4f;
+  --erro: #b3261e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+:focus-visible {
+  outline: 2px solid var(--verde);
+  outline-offset: 2px;
+}

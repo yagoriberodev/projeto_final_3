@@ -1,0 +1,30 @@
+.botao {
+  display: block;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font: inherit;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.botao--principal {
+  background-color: #111;
+  color: #fff;
+}
+
+.botao--principal:hover {
+  background-color: #333;
+}
+
+.botao--secundario {
+  background: transparent;
+  color: #111;
+  border-color: #ccc;
+}
+
+.botao--secundario:hover {
+  background: #f1f1f1;
+}

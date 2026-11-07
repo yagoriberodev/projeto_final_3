@@ -1,0 +1,32 @@
+.tabela__rolagem {
+  overflow-x: auto;
+  border: 1px solid var(--borda);
+  border-radius: 4px;
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.tabela th,
+.tabela td {
+  padding: 0.65rem 0.9rem;
+  text-align: left;
+  border-bottom: 1px solid var(--borda);
+  white-space: nowrap;
+}
+
+.tabela th {
+  background: var(--superficie);
+  font-weight: 600;
+}
+
+.tabela tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabela .botao {
+  padding: 0.35rem 0.9rem;
+}

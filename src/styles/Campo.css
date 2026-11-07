@@ -1,0 +1,20 @@
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.campo input {
+  box-sizing: border-box;
+  padding: 0.75rem;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  font: inherit;
+}
+
+.campo input:focus-visible {
+  outline: 2px solid var(--verde);
+  outline-offset: 1px;
+}

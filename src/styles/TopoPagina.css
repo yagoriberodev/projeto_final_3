@@ -1,0 +1,24 @@
+.topo-pagina {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.topo-pagina h1 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+.topo-pagina p {
+  margin: 0.25rem 0 0;
+  color: var(--texto-suave);
+}
+
+.topo-pagina__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}

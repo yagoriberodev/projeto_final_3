@@ -1,0 +1,36 @@
+/* Layout comum das páginas internas (dashboards e times). */
+.pagina {
+  width: min(100%, 60rem);
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.pagina__cartoes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.pagina__secao {
+  margin-bottom: 2rem;
+}
+
+.pagina__secao h2 {
+  font-size: 1.1rem;
+  margin: 0 0 1rem;
+}
+
+.pagina__erro {
+  color: var(--erro);
+}
+
+.mensagem-pagina {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--texto-suave);
+}
+
+.mensagem-pagina--erro {
+  color: var(--erro);
+}
