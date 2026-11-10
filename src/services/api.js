@@ -2,7 +2,7 @@
 // O navegador envia o cookie com o token sozinho: aqui não há token nenhum.
 
 // Nestas duas rotas, um 401 é esperado (senha errada / ninguém logado).
-const SEM_REDIRECIONAR = ['/api/usuarios/login', '/api/me']
+const SEM_REDIRECIONAR = ['/api/usuarios/login', '/api/usuarios/login/google', '/api/me']
 
 export async function requisicao(url, opcoes = {}) {
   let resposta

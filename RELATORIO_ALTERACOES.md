@@ -80,6 +80,27 @@ Dois "porteiros" (middlewares) em `server/seguranca.js` cuidam das permissões: 
 - Se o seu banco `laivy` é da versão anterior, o servidor **acrescenta a coluna sozinho** e passa os times antigos para o usuário `yago`. Nenhum dado é apagado.
 - Usuário novo de teste: `maria`, com um time, para mostrar que cada cliente só vê o que é dele.
 
+## Entrega 4 - Login com Google
+
+- A tela de login também abre o Google pelo Firebase Authentication.
+- O frontend usa persistência apenas em memória, envia o ID token ao backend e encerra a sessão Firebase após a troca.
+- O backend valida o token com Firebase Admin, cria ou localiza o usuário pelo UID e inicia o mesmo cookie `httpOnly` de duas horas.
+- O UID Firebase é salvo em `usuarios.firebase_uid`; bancos existentes recebem a coluna automaticamente.
+- Nenhum token é salvo em `localStorage` ou `sessionStorage`.
+
+### Configuração necessária
+
+1. No Firebase Console do projeto `login-bb056`, habilite **Authentication > Provedores > Google** e autorize `localhost` nos domínios.
+2. O backend valida o ID token com o Firebase Admin e o ID do projeto; não é necessário criar nem armazenar uma chave privada de serviço para o login local.
+3. Caso o projeto Firebase seja alterado, defina o ID antes de iniciar:
+
+```powershell
+$env:FIREBASE_PROJECT_ID="login-bb056"
+npm start
+```
+
+Em hospedagem, configure `FIREBASE_PROJECT_ID` no ambiente do serviço.
+
 ### 7. Componentes novos (reaproveitados)
 
 | Componente | Onde é usado |

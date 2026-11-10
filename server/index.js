@@ -2,10 +2,16 @@
 import express from 'express'
 import cookieParser from 'cookie-parser'
 import bcrypt from 'bcryptjs'
+import { randomBytes, createHash } from 'node:crypto'
+import { initializeApp } from 'firebase-admin/app'
+import { getAuth } from 'firebase-admin/auth'
 import { pool, prepararBanco } from './banco.js'
 import { iniciarSessao, encerrarSessao, verificarLogin, somenteAdmin } from './seguranca.js'
 
 const app = express()
+const firebaseApp = initializeApp({
+  projectId: process.env.FIREBASE_PROJECT_ID || 'login-bb056',
+})
 app.use(express.json())
 app.use(cookieParser()) // permite ler o cookie com o token
 
@@ -39,6 +45,55 @@ app.post('/api/usuarios/login', rota(async (req, res) => {
 
   if (!senhaCerta) {
     return res.status(401).json({ mensagem: 'Login ou senha inválidos.' })
+  }
+
+  iniciarSessao(res, usuario)
+  res.json({ id: usuario.id, login: usuario.login, nome: usuario.nome, tipo: usuario.tipo })
+}))
+
+app.post('/api/usuarios/login/google', rota(async (req, res) => {
+  const { idToken } = req.body || {}
+  if (typeof idToken !== 'string' || !idToken) {
+    return res.status(400).json({ mensagem: 'Token do Google não informado.' })
+  }
+
+  let identidade
+  try {
+    identidade = await getAuth(firebaseApp).verifyIdToken(idToken)
+  } catch (erro) {
+    console.error('Falha ao validar token Firebase:', erro)
+    return res.status(401).json({ mensagem: 'Token Google inválido ou expirado.' })
+  }
+
+  if (identidade.firebase?.sign_in_provider !== 'google.com' || !identidade.email || !identidade.email_verified) {
+    return res.status(401).json({ mensagem: 'É necessário entrar com uma conta Google verificada.' })
+  }
+
+  let [usuarios] = await pool.query(
+    'SELECT id, login, nome, tipo FROM usuarios WHERE firebase_uid = ?',
+    [identidade.uid],
+  )
+  let usuario = usuarios[0]
+
+  if (!usuario) {
+    const login = `google_${createHash('sha256').update(identidade.uid).digest('hex').slice(0, 40)}`
+    const nome = String(identidade.name || identidade.email).slice(0, 100)
+    const senhaAleatoria = await bcrypt.hash(randomBytes(32).toString('hex'), 10)
+    try {
+      const [resultado] = await pool.query(
+        'INSERT INTO usuarios (login, senha, nome, tipo, firebase_uid) VALUES (?, ?, ?, ?, ?)',
+        [login, senhaAleatoria, nome, 'Treinador', identidade.uid],
+      )
+      usuario = { id: resultado.insertId, login, nome, tipo: 'Treinador' }
+    } catch (erro) {
+      if (erro.code !== 'ER_DUP_ENTRY') throw erro
+      ;[usuarios] = await pool.query(
+        'SELECT id, login, nome, tipo FROM usuarios WHERE firebase_uid = ?',
+        [identidade.uid],
+      )
+      usuario = usuarios[0]
+      if (!usuario) throw erro
+    }
   }
 
   iniciarSessao(res, usuario)

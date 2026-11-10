@@ -4,7 +4,7 @@ import useLogin from '../hooks/useLogin'
 import '../styles/Login.css'
 
 function Login() {
-  const { loginDigitado, setLoginDigitado, senha, setSenha, erro, entrar } = useLogin()
+  const { loginDigitado, setLoginDigitado, senha, setSenha, erro, entrar, entrarComGoogle, carregandoGoogle } = useLogin()
 
   return (
     <main className="login">
@@ -35,6 +35,12 @@ function Login() {
         )}
 
         <Botao type="submit">Entrar</Botao>
+
+        <div className="login__divisor" aria-hidden="true"><span>ou</span></div>
+
+        <Botao type="button" variante="secundario" onClick={entrarComGoogle} disabled={carregandoGoogle}>
+          {carregandoGoogle ? 'Conectando...' : 'Entrar com Google'}
+        </Botao>
       </form>
     </main>
   )

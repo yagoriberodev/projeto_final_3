@@ -8,6 +8,26 @@ import config from './config.js'
 
 const pasta = path.dirname(fileURLToPath(import.meta.url))
 
+async function atualizarTabelaUsuarios(conexao) {
+  const [tabela] = await conexao.query(
+    `SELECT 1 FROM information_schema.tables
+     WHERE table_schema = 'laivy' AND table_name = 'usuarios'`,
+  )
+  if (tabela.length === 0) return
+
+  const [coluna] = await conexao.query(
+    `SELECT 1 FROM information_schema.columns
+     WHERE table_schema = 'laivy' AND table_name = 'usuarios' AND column_name = 'firebase_uid'`,
+  )
+  if (coluna.length > 0) return
+
+  await conexao.query(
+    `ALTER TABLE laivy.usuarios
+       ADD COLUMN firebase_uid VARCHAR(128) NULL,
+       ADD UNIQUE KEY uq_usuarios_firebase_uid (firebase_uid)`,
+  )
+}
+
 // Se o seu banco "laivy" é da versão anterior, a tabela times ainda não tem
 // a coluna usuario_id. Aqui ela é acrescentada sem apagar nenhum dado.
 async function atualizarTabelaTimes(conexao) {
@@ -54,6 +74,7 @@ export async function prepararBanco() {
     await conexao.query(
       'CREATE DATABASE IF NOT EXISTS laivy CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci',
     )
+    await atualizarTabelaUsuarios(conexao)
     await atualizarTabelaTimes(conexao)
 
     const sql = fs.readFileSync(path.join(pasta, 'banco.sql'), 'utf-8')

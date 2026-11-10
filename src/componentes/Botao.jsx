@@ -3,7 +3,7 @@ import '../styles/Botao.css'
 
 // Botão reutilizável. Com "to" vira um link para outra página;
 // sem "to" é um botão normal (submit, clique...).
-function Botao({ children, to, type = 'button', onClick, variante = 'principal' }) {
+function Botao({ children, to, type = 'button', onClick, variante = 'principal', disabled = false }) {
   const classe = `botao botao--${variante}`
 
   if (to) {
@@ -15,7 +15,7 @@ function Botao({ children, to, type = 'button', onClick, variante = 'principal' 
   }
 
   return (
-    <button className={classe} type={type} onClick={onClick}>
+    <button className={classe} type={type} onClick={onClick} disabled={disabled}>
       {children}
     </button>
   )

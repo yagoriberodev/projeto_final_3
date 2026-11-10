@@ -14,7 +14,8 @@ CREATE TABLE IF NOT EXISTS usuarios (
   login  VARCHAR(50)  NOT NULL UNIQUE,
   senha  VARCHAR(100) NOT NULL,
   nome   VARCHAR(100) NOT NULL,
-  tipo   VARCHAR(30)  NOT NULL
+  tipo   VARCHAR(30)  NOT NULL,
+  firebase_uid VARCHAR(128) NULL UNIQUE
 );
 
 -- Times. Cada time pertence a um usuário (usuario_id).
