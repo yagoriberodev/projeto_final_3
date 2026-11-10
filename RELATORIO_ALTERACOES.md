@@ -63,6 +63,7 @@ As regras valem no **front e no backend**. O backend é quem de fato protege os 
 | Rota | Quem acessa | O que faz |
 |---|---|---|
 | `POST /api/usuarios/login` | Todos | Confere a senha e cria o cookie |
+| `POST /api/usuarios/login/google` | Todos | Valida o ID token Firebase, localiza/cria o usuário pelo UID e cria o cookie |
 | `GET /api/me` | Logado | Devolve quem está logado |
 | `POST /api/logout` | Todos | Apaga o cookie |
 | `GET /api/times` | Logado | Cliente: os seus times. Admin: todos |
@@ -79,6 +80,17 @@ Dois "porteiros" (middlewares) em `server/seguranca.js` cuidam das permissões: 
 - `times`: **nova coluna `usuario_id`** (o dono do time), ligada a `usuarios` por chave estrangeira.
 - Se o seu banco `laivy` é da versão anterior, o servidor **acrescenta a coluna sozinho** e passa os times antigos para o usuário `yago`. Nenhum dado é apagado.
 - Usuário novo de teste: `maria`, com um time, para mostrar que cada cliente só vê o que é dele.
+
+### 7. Componentes novos (reaproveitados)
+
+| Componente | Onde é usado |
+|---|---|
+| `RotaProtegida` | Protege todas as páginas internas (App.jsx) |
+| `TopoPagina` | Usuário, Admin e Times |
+| `Tabela` | Usuário (1 vez) e Admin (2 vezes) |
+| `GraficoBarras` | Usuário e Admin |
+| `BotaoSair` | Usuário e Admin |
+| `Card` (já existia) | Usuário, Admin e Times |
 
 ## Entrega 4 - Login com Google
 
@@ -101,21 +113,13 @@ npm start
 
 Em hospedagem, configure `FIREBASE_PROJECT_ID` no ambiente do serviço.
 
-### 7. Componentes novos (reaproveitados)
-
-| Componente | Onde é usado |
-|---|---|
-| `RotaProtegida` | Protege todas as páginas internas (App.jsx) |
-| `TopoPagina` | Usuário, Admin e Times |
-| `Tabela` | Usuário (1 vez) e Admin (2 vezes) |
-| `GraficoBarras` | Usuário e Admin |
-| `BotaoSair` | Usuário e Admin |
-| `Card` (já existia) | Usuário, Admin e Times |
+4. A chave de API do navegador está limitada às APIs **Identity Toolkit** e **Token Service** e aos endereços locais (`localhost:5173`, `localhost:5174` e `localhost:5175`) e domínios Firebase do projeto. Antes de publicar, adicione o domínio de produção às restrições da chave no Google Cloud e aos domínios autorizados do Firebase Authentication.
 
 ## Arquivos
 
 **Novos**
 - Backend: `server/seguranca.js`
+- Frontend: `src/firebase.js`
 - Componentes: `RotaProtegida`, `TopoPagina`, `Tabela`, `GraficoBarras`, `BotaoSair`
 - Hooks: `useSessao`, `useAdmin`
 - Páginas: `Admin.jsx`
@@ -124,14 +128,14 @@ Em hospedagem, configure `FIREBASE_PROJECT_ID` no ambiente do serviço.
 
 **Alterados**
 - Backend: `server/index.js`, `server/banco.js`, `server/banco.sql`, `server/config.js`
-- Front: `App.jsx` (novas rotas e proteção), `api.js` (cookie e sessão vencida), `authService.js` (sem localStorage), `useUsuario.js`, `Inicio.jsx`, `Usuario.jsx`, `Times.jsx`, `Times.css`
-- `package.json`: novas bibliotecas `jsonwebtoken`, `cookie-parser` e `bcryptjs`
+- Front: `App.jsx` (novas rotas e proteção), `api.js` (cookie e sessão vencida), `authService.js` (login/sessão), `useLogin.js`, `Login.jsx`, `Login.css`, `Botao.jsx`, `useUsuario.js`, `Inicio.jsx`, `Usuario.jsx`, `Times.jsx`, `Times.css`
+- `package.json`: bibliotecas `jsonwebtoken`, `cookie-parser`, `bcryptjs`, `firebase` e `firebase-admin`
 
 **Removidos**
 - `usuarioService.js` (substituído por `dashboardService.js`)
 - `Usuario.css` (substituído por `Pagina.css` e `TopoPagina.css`)
 
-Não foram alterados: `Login.jsx`, `Login.css`, `Botao`, `Campo`, `Card`, `Footer`, `Layout` e a imagem do LAIVY.
+Não foram alterados: `Campo`, `Card`, `Footer`, `Layout` e a imagem do LAIVY.
 
 ## Como rodar
 
