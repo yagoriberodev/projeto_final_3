@@ -1,6 +1,4 @@
 -- Banco de dados do LAIVY.
--- O servidor roda este arquivo sozinho ao iniciar, mas pode
--- executar no MySQL Workbench para mostrar o banco.
 
 CREATE DATABASE IF NOT EXISTS laivy
   CHARACTER SET utf8mb4
